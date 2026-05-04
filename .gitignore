@@ -4,3 +4,12 @@ obj/
 *.db-shm
 *.db-wal
 *.user
+/src/PersonalTaskBoard/.vs/ProjectEvaluation
+/src/PersonalTaskBoard/.vs/PersonalTaskBoard/copilot-chat/590231d3/sessions
+/.vs/personaltaskboard.slnx
+/.vs/slnx.sqlite
+/.vs/VSWorkspaceState.json
+/src/PersonalTaskBoard/.vs/PersonalTaskBoard/config/applicationhost.config
+/src/PersonalTaskBoard/.vs/PersonalTaskBoard/DesignTimeBuild/.dtbcache.v2
+/src/PersonalTaskBoard/.vs/PersonalTaskBoard/FileContentIndex/c0806a19-f391-4541-905b-afec78732d06.vsidx
+/src/PersonalTaskBoard/.vs/PersonalTaskBoard/v18
