@@ -233,7 +233,7 @@ public static class TasksEndpoints
             var columnExists = await db.Columns.AnyAsync(x => x.Id == request.ColumnId);
             if (!columnExists)
             {
-                return Results.BadRequest(new { message = "Column not found." });
+                return Results.NotFound(new { message = "Column not found." });
             }
 
             var tasks = await db.TaskItems
@@ -338,3 +338,4 @@ public static class TasksEndpoints
             task.CreatedAt,
             task.UpdatedAt);
 }
+
