@@ -1,0 +1,118 @@
+@page "/tasks/details"
+@model PersonalTaskBoard.Pages.Tasks.DetailsModel
+@{
+    ViewData["Title"] = Model.Task?.Title ?? "Task Detail";
+    var task = Model.Task!;
+    var isOverdue = task.DueDate.HasValue && task.DueDate.Value < DateOnly.FromDateTime(DateTime.Today);
+}
+
+<div class="detail-page">
+    <div class="detail-header">
+        <a href="/" class="back-link">← Back to Board</a>
+        <div class="detail-actions">
+            <button class="btn btn-danger" id="delete-task-btn" data-task-id="@task.Id">Delete Task</button>
+        </div>
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-meta">
+            <span class="priority-badge priority-@task.Priority.ToString().ToLower()">@task.Priority</span>
+            @if (isOverdue)
+            {
+                <span class="overdue-badge">⚠️ Overdue</span>
+            }
+            <span class="detail-column">Column: @Model.Column?.Name</span>
+        </div>
+
+        <div class="detail-form">
+            <input type="hidden" id="task-id" value="@task.Id" />
+
+            <div class="form-group">
+                <label for="detail-title">Title *</label>
+                <input type="text" id="detail-title" value="@task.Title" maxlength="200" class="form-input" />
+            </div>
+
+            <div class="form-group">
+                <label for="detail-desc">Description</label>
+                <textarea id="detail-desc" maxlength="4000" class="form-textarea">@task.Description</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="detail-priority">Priority</label>
+                    <select id="detail-priority" class="form-input">
+                        <option value="Low" selected="@(task.Priority == PersonalTaskBoard.Domain.Enums.Priority.Low)">Low</option>
+                        <option value="Medium" selected="@(task.Priority == PersonalTaskBoard.Domain.Enums.Priority.Medium)">Medium</option>
+                        <option value="High" selected="@(task.Priority == PersonalTaskBoard.Domain.Enums.Priority.High)">High</option>
+                        <option value="Urgent" selected="@(task.Priority == PersonalTaskBoard.Domain.Enums.Priority.Urgent)">Urgent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="detail-due">Due Date</label>
+                    <input type="date" id="detail-due" value="@(task.DueDate?.ToString("yyyy-MM-dd") ?? "")" class="form-input" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="detail-assignee">Assignee</label>
+                <input type="text" id="detail-assignee" value="@task.AssigneeLabel" maxlength="60" class="form-input" />
+            </div>
+
+            <div class="detail-timestamps">
+                <span>Created: @task.CreatedAt.LocalDateTime.ToString("g")</span>
+                <span>Updated: @task.UpdatedAt.LocalDateTime.ToString("g")</span>
+            </div>
+
+            <div class="detail-save-actions">
+                <button class="btn btn-primary" id="save-task-btn">Save Changes</button>
+                <span class="save-feedback" id="save-feedback"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const taskId = document.getElementById('task-id').value;
+
+    document.getElementById('save-task-btn').addEventListener('click', async () => {
+        const body = {
+            title: document.getElementById('detail-title').value,
+            description: document.getElementById('detail-desc').value || null,
+            dueDate: document.getElementById('detail-due').value || null,
+            priority: document.getElementById('detail-priority').value,
+            assigneeLabel: document.getElementById('detail-assignee').value || null
+        };
+        try {
+            const res = await fetch(`/api/tasks/${taskId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+            const fb = document.getElementById('save-feedback');
+            if (res.ok) {
+                fb.textContent = '✓ Saved';
+                fb.style.color = '#006644';
+            } else {
+                const err = await res.json();
+                fb.textContent = err.message || 'Error saving';
+                fb.style.color = '#bf2600';
+            }
+            setTimeout(() => fb.textContent = '', 3000);
+        } catch (e) {
+            document.getElementById('save-feedback').textContent = 'Network error';
+        }
+    });
+
+    document.getElementById('delete-task-btn').addEventListener('click', async () => {
+        if (!confirm('Delete this task?')) return;
+        const res = await fetch(`/api/tasks/${taskId}`, { method: 'DELETE' });
+        if (res.ok || res.status === 204) {
+            window.location.href = '/';
+        } else {
+            alert('Failed to delete task');
+        }
+    });
+</script>
+}
