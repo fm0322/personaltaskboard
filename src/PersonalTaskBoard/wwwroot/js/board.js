@@ -50,6 +50,7 @@
         `;
 
         li.addEventListener('click', () => {
+            if (window._taskDragJustEnded) return;
             window.location.href = `/tasks/details?id=${task.id}`;
         });
 
