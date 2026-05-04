@@ -29,8 +29,11 @@
             animation: 150,
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
+            fallbackClass: 'sortable-fallback',
             handle: '.task-card',
-            forceFallback: false,
+            forceFallback: true,
+            fallbackOnBody: true,
+            swapThreshold: 0.65,
             onEnd: async function (evt) {
                 const taskId = evt.item.dataset.taskId;
                 const fromList = evt.from;
@@ -91,12 +94,15 @@
         if (!container) return;
 
         Sortable.create(container, {
+            group: { name: 'columns', put: false, pull: false },
             animation: 150,
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
             handle: '.column-header',
             filter: '.btn-add-task, .btn-icon, input, select, button',
             preventOnFilter: true,
+            forceFallback: true,
+            fallbackOnBody: true,
             onEnd: async function (evt) {
                 const ids = Array.from(container.querySelectorAll('.column-lane'))
                     .map(el => el.dataset.columnId)
