@@ -15,9 +15,7 @@
     <main>
         @RenderBody()
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"
-            integrity="sha256-nSMnJnAFoJDEFQZEAadP0LCBhAnRhxN9/ZSNX0YY4dA="
-            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script src="~/js/board.js" asp-append-version="true"></script>
     <script src="~/js/dragdrop.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
