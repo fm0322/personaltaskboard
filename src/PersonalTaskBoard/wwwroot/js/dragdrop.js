@@ -6,6 +6,8 @@
         return;
     }
 
+    window._taskDragJustEnded = false;
+
     // ── State snapshot for revert ─────────────────────────────────────────────
 
     function snapshotOrder(list) {
@@ -30,11 +32,15 @@
             ghostClass: 'sortable-ghost',
             dragClass: 'sortable-drag',
             fallbackClass: 'sortable-fallback',
-            handle: '.task-card',
             forceFallback: true,
             fallbackOnBody: true,
+            fallbackTolerance: 5,
             swapThreshold: 0.65,
+            onStart: function () {
+                window._taskDragJustEnded = true;
+            },
             onEnd: async function (evt) {
+                setTimeout(() => { window._taskDragJustEnded = false; }, 300);
                 const taskId = evt.item.dataset.taskId;
                 const fromList = evt.from;
                 const toList = evt.to;
