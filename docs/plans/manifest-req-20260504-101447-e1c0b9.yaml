@@ -1,0 +1,74 @@
+request_id: req-20260504-101447-e1c0b9
+feature: Personal Task Board (Kanban)
+created: "2026-05-04"
+
+architecture_manifest: docs/architecture/manifest-req-20260504-101447-e1c0b9.yaml
+
+artifacts:
+  implementation_plan: docs/plans/implementation-plan-req-20260504-101447-e1c0b9.md
+
+architecture_artifacts:
+  system_architecture: docs/architecture/system-architecture-req-20260504-101447-e1c0b9.md
+  data_model: docs/architecture/data-model-req-20260504-101447-e1c0b9.md
+  api_contract: docs/architecture/api-contract-req-20260504-101447-e1c0b9.yaml
+  adrs:
+    - docs/architecture/adrs/adr-001-sqlite-efcore.md
+    - docs/architecture/adrs/adr-002-razor-pages-vs-spa.md
+    - docs/architecture/adrs/adr-003-dragdrop-library.md
+
+architect_branch: docs/architecture-req-20260504-101447-e1c0b9
+architect_commit: 8d61635ddd0a24e6ea46189301d20e3b18412024
+
+plan_summary:
+  total_tasks: 13
+  total_estimated_hours: 44
+  critical_path_hours: 42
+  parallelization_factor: 1.05
+  phases:
+    - phase_id: phase-0
+      name: "Phase 0: Architecture (Complete)"
+      task_ids: []
+    - phase_id: phase-1
+      name: "Phase 1: Project Foundation"
+      task_ids: [step-001, step-002, step-003, step-004]
+      parallelizable: false
+    - phase_id: phase-2
+      name: "Phase 2: API Endpoints"
+      task_ids: [step-005, step-006]
+      parallelizable: false
+    - phase_id: phase-3
+      name: "Phase 3: Razor Pages"
+      task_ids: [step-007, step-008]
+      parallelizable: false
+    - phase_id: phase-4
+      name: "Phase 4: Frontend JavaScript"
+      task_ids: [step-009, step-010]
+      parallelizable: false
+    - phase_id: phase-5
+      name: "Phase 5: QA & Security (Parallel)"
+      task_ids: [step-011, step-012]
+      parallelizable: true
+    - phase_id: phase-6
+      name: "Phase 6: Code Review & PR"
+      task_ids: [step-013]
+      parallelizable: false
+
+rubber_duck_critique:
+  executed: true
+  findings_count: 13
+  critical_findings: 2
+  major_findings: 9
+  minor_findings: 2
+  incorporated: true
+  key_changes:
+    - Fixed dependency graph (step-009 depends on step-006; step-011/012 depend on step-008)
+    - Corrected read_only flags (step-011 false; step-012 false with doc write)
+    - Parallelization re-validated by project scope (PersonalTaskBoard.Tests vs docs/security)
+    - Added EF Core tooling prerequisite to step-003
+    - Pinned SortableJS to specific version (not @latest)
+    - Added Swagger/API explorer to step-003
+    - Fixed incomplete file lists (Program.cs in step-003, step-006; CSS in step-010; security doc in step-012; solution in step-011)
+    - Normalized API contract naming (priority as strings, targetIndex vs newSortOrder)
+    - Added negative-path acceptance criteria to step-005 and step-006
+    - Switched from EF InMemory to in-memory SQLite for tests
+    - Corrected effort totals (44h total, 42h critical path, 1.05x factor)

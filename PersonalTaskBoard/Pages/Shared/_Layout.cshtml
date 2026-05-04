@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Personal Task Board</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-inner">
+            <span class="app-logo">📋 Personal Task Board</span>
+        </div>
+    </header>
+    <main>
+        @RenderBody()
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"
+            integrity="sha256-nSMnJnAFoJDEFQZEAadP0LCBhAnRhxN9/ZSNX0YY4dA="
+            crossorigin="anonymous"></script>
+    <script src="~/js/board.js" asp-append-version="true"></script>
+    <script src="~/js/dragdrop.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

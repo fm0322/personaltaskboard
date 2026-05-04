@@ -1,0 +1,93 @@
+@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Board";
+}
+
+<div class="board-toolbar">
+    <div class="filter-bar">
+        <input type="text" id="search-input" placeholder="Search tasks…" class="filter-input" />
+        <select id="priority-filter" class="filter-select">
+            <option value="">All Priorities</option>
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Urgent">Urgent</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" id="add-column-btn">+ Add Column</button>
+</div>
+
+<div class="board-container" id="board-container">
+    @if (Model.Board == null)
+    {
+        <div class="no-board">No board found. Please restart the application to seed data.</div>
+    }
+    else
+    {
+        <input type="hidden" id="board-id" value="@Model.Board.Id" />
+        @foreach (var col in Model.Columns)
+        {
+            <div class="column-lane" data-column-id="@col.Id" id="col-@col.Id">
+                <div class="column-header">
+                    <span class="column-title">@col.Name</span>
+                    @if (col.WipLimit.HasValue)
+                    {
+                        <span class="wip-limit" data-wip="@col.WipLimit">WIP: @col.WipLimit</span>
+                    }
+                    <div class="column-actions">
+                        <button class="btn-icon edit-column-btn" data-column-id="@col.Id" data-column-name="@col.Name" data-wip-limit="@(col.WipLimit?.ToString() ?? "")" title="Edit column">✏️</button>
+                        <button class="btn-icon delete-column-btn" data-column-id="@col.Id" data-column-name="@col.Name" title="Delete column">🗑️</button>
+                    </div>
+                </div>
+                <ul class="task-list" data-column-id="@col.Id" id="task-list-@col.Id">
+                    <!-- Tasks injected by board.js -->
+                </ul>
+                <button class="btn btn-add-task" data-column-id="@col.Id">+ Add Task</button>
+            </div>
+        }
+    }
+</div>
+
+<!-- Add/Edit Column Modal -->
+<div class="modal-overlay" id="column-modal" style="display:none">
+    <div class="modal">
+        <h2 id="column-modal-title">Add Column</h2>
+        <label>Name <input type="text" id="column-name-input" maxlength="80" class="modal-input" /></label>
+        <label>WIP Limit <input type="number" id="column-wip-input" min="1" class="modal-input" placeholder="None" /></label>
+        <div class="modal-actions">
+            <button class="btn btn-primary" id="column-modal-save">Save</button>
+            <button class="btn btn-secondary" id="column-modal-cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Task Modal -->
+<div class="modal-overlay" id="task-modal" style="display:none">
+    <div class="modal">
+        <h2>Add Task</h2>
+        <input type="hidden" id="task-modal-column-id" />
+        <label>Title * <input type="text" id="task-title-input" maxlength="200" class="modal-input" /></label>
+        <label>Description <textarea id="task-desc-input" maxlength="4000" class="modal-textarea"></textarea></label>
+        <label>Priority
+            <select id="task-priority-input" class="modal-input">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+                <option value="Urgent">Urgent</option>
+            </select>
+        </label>
+        <label>Due Date <input type="date" id="task-due-input" class="modal-input" /></label>
+        <label>Assignee <input type="text" id="task-assignee-input" maxlength="60" class="modal-input" /></label>
+        <div class="modal-actions">
+            <button class="btn btn-primary" id="task-modal-save">Add Task</button>
+            <button class="btn btn-secondary" id="task-modal-cancel">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Error Banner -->
+<div class="error-banner" id="error-banner" style="display:none">
+    <span id="error-message"></span>
+    <button onclick="document.getElementById('error-banner').style.display='none'">✕</button>
+</div>
