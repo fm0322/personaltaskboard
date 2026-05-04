@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using PersonalTaskBoard.Data;
+using PersonalTaskBoard.Api;
 using PersonalTaskBoard.Domain;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,6 +29,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 app.MapRazorPages();
+app.MapColumnsEndpoints();
+app.MapTasksEndpoints();
 
 using (var scope = app.Services.CreateScope())
 {
