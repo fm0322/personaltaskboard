@@ -8,4 +8,4 @@ artifacts:
     - docs/architecture/adrs/adr-002-razor-pages-vs-spa.md
     - docs/architecture/adrs/adr-003-dragdrop-library.md
 branch: docs/architecture-req-20260504-101447-e1c0b9
-commit_sha: 301c82c5996b4524cdeb15f767d01beddbdedea5
+commit_sha: ff6a948c2fdbbda475cf931efd5de39817e1b530
